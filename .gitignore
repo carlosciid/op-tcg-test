@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+venv312/
+*.egg-info/
+dist/
+build/
+
+# Angular
+frontend/op-tcg-frontend/node_modules/
+frontend/op-tcg-frontend/dist/
+frontend/op-tcg-frontend/.angular/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# Playwright
+playwright-report/
+test-results/
+
