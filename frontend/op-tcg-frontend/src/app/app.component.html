@@ -1,0 +1,239 @@
+<main class="page">
+    <section class="page-header">
+        <h1 class="page-title">One Piece TCG - Market price checker</h1>
+        <p class="page-subtitle">
+            Ingresa los datos de la carta de One Piece TCG y consulta el precio de mercado actual desde TCGplayer.
+        </p>
+    </section>
+
+    <!-- Formulario de búsqueda -->
+    <section class="search-container">
+        <form [formGroup]="search_form" (ngSubmit)="on_search()" novalidate>
+            <div class="search-box">
+                <input
+                    type="text"
+                    formControlName="search_query"
+                    placeholder="Buscar cartas (ej: Roronoa Zoro, Monkey.D.Luffy...)"
+                    autocomplete="off"
+                />
+                <button type="submit" [disabled]="search_form.invalid || is_searching()">
+                    <span *ngIf="!is_searching()">Buscar</span>
+                    <span *ngIf="is_searching()">
+                        <span class="search-spinner-small"></span>
+                        Buscando...
+                    </span>
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Formulario para obtener precio específico -->
+    <section class="card-form-container">
+        <form [formGroup]="card_form" (ngSubmit)="on_submit()" novalidate>
+            <div class="form-field">
+                <label for="card_name">Nombre de la carta</label>
+                <input
+                    id="card_name"
+                    type="text"
+                    formControlName="card_name"
+                    placeholder="Ej: Roronoa Zoro"
+                    autocomplete="off"
+                />
+                <div class="field-error" *ngIf="card_form.get('card_name')?.touched && card_form.get('card_name')?.invalid">
+                    El nombre de la carta es obligatorio.
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="set_name">Set (opcional)</label>
+                <input
+                    id="set_name"
+                    type="text"
+                    formControlName="set_name"
+                    placeholder="Ej: OP05-119 o Romance Dawn"
+                    autocomplete="off"
+                />
+                <div class="field-hint">
+                    Puedes dejar este campo vacío si solo buscas por nombre de carta.
+                </div>
+            </div>
+
+            <div class="form-field form-field-inline">
+                <label class="checkbox-label">
+                    <input
+                        id="is_foil"
+                        type="checkbox"
+                        formControlName="is_foil"
+                    />
+                    Es foil / alternativa
+                </label>
+            </div>
+
+            <button type="submit" [disabled]="is_submit_disabled">
+                <span *ngIf="!is_loading()">Buscar precio</span>
+                <span *ngIf="is_loading()">Buscando...</span>
+            </button>
+        </form>
+    </section>
+
+    <!-- Sección de filtros -->
+    <section class="filters-section" *ngIf="search_results().length > 0">
+        <h3 class="filters-title">Filtros</h3>
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="filter_rarity">Rareza:</label>
+                <select id="filter_rarity" [value]="filter_rarity()" (change)="filter_rarity.set($any($event.target).value)">
+                    <option value="all">Todas</option>
+                    <option *ngFor="let rarity of unique_rarities()" [value]="rarity">{{ rarity }}</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter_set">Set:</label>
+                <select id="filter_set" [value]="filter_set()" (change)="filter_set.set($any($event.target).value)">
+                    <option value="all">Todos</option>
+                    <option *ngFor="let set of unique_sets()" [value]="set">{{ set }}</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter_card_type">Tipo de carta:</label>
+                <select id="filter_card_type" [value]="filter_card_type()" (change)="filter_card_type.set($any($event.target).value)">
+                    <option value="all">Todos</option>
+                    <option *ngFor="let cardType of unique_card_types()" [value]="cardType">{{ cardType }}</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter_color">Color:</label>
+                <select id="filter_color" [value]="filter_color()" (change)="filter_color.set($any($event.target).value)">
+                    <option value="all">Todos</option>
+                    <option *ngFor="let color of unique_colors()" [value]="color">{{ color }}</option>
+                </select>
+            </div>
+            
+            <button type="button" class="clear-filters-btn" (click)="clear_filters()">
+                Limpiar filtros
+            </button>
+        </div>
+        <div class="results-count">
+            Mostrando {{ filtered_results().length }} de {{ search_results().length }} resultados
+        </div>
+    </section>
+
+    <!-- Sección de resultados de búsqueda: muestra todas las versiones encontradas -->
+    <section class="search-results-section" *ngIf="search_results().length > 0 && !is_searching()">
+        <div class="results-header">
+            <h2 class="results-title">
+                Resultados encontrados
+                <span class="results-count-badge" *ngIf="search_response()">
+                    ({{ search_response()!.total_results }} total)
+                </span>
+            </h2>
+            <div class="pagination-info" *ngIf="search_response()">
+                Página {{ search_response()!.page }} de {{ search_response()!.total_pages }}
+            </div>
+        </div>
+        <div class="results-grid">
+            <div
+                class="result-card-item"
+                *ngFor="let card of filtered_results()"
+                (click)="select_card(card)"
+            >
+                <div class="card-image-container">
+                                <img 
+                                    *ngIf="card.image_url" 
+                                    [src]="card.image_url" 
+                                    [alt]="card.card_name"
+                                    class="card-image"
+                                    (error)="on_image_error($event)"
+                                />
+                                <div class="card-placeholder" *ngIf="!card.image_url">
+                                    Sin imagen
+                                </div>
+                </div>
+                                <div class="card-info">
+                                    <h3 class="card-name">{{ card.card_name }}</h3>
+                                    <div class="card-meta">
+                                        <span class="card-set" *ngIf="card.set_name">
+                                            {{ format_set_name(card) }}
+                                        </span>
+                                        <span class="card-number" *ngIf="card.card_number">
+                                            {{ card.card_number }}
+                                        </span>
+                                        <span class="card-rarity" *ngIf="card.rarity">
+                                            {{ card.rarity }}
+                                        </span>
+                                        <span class="card-type" *ngIf="card.card_type">
+                                            {{ card.card_type }}
+                                        </span>
+                                        <span class="card-color" *ngIf="card.color">
+                                            {{ card.color }}
+                                        </span>
+    </div>
+                                    <div class="card-price-container" *ngIf="card.market_price">
+                                        <span class="card-price-label">Precio de mercado:</span>
+                                        <span class="card-price-value">
+                                            ${{ card.market_price | number : '1.2-2' }}
+                                        </span>
+      </div>
+                                    <button class="card-select-btn" (click)="select_card(card); $event.stopPropagation()">
+                                        Seleccionar esta carta
+                                    </button>
+      </div>
+    </div>
+  </div>
+        
+        <!-- Controles de paginación -->
+        <div class="pagination-controls" *ngIf="search_response() && search_response()!.total_pages > 1">
+            <button 
+                class="pagination-btn" 
+                [disabled]="!search_response()!.has_previous_page"
+                (click)="previous_page()"
+            >
+                ← Anterior
+            </button>
+            
+            <div class="pagination-pages">
+                <button
+                    *ngFor="let p of get_page_numbers()"
+                    class="pagination-page-btn"
+                    [class.active]="p === current_page()"
+                    [disabled]="p === current_page()"
+                    (click)="go_to_page(p)"
+                >
+                    {{ p }}
+                </button>
+            </div>
+            
+            <button 
+                class="pagination-btn" 
+                [disabled]="!search_response()!.has_next_page"
+                (click)="next_page()"
+            >
+                Siguiente →
+            </button>
+        </div>
+    </section>
+
+    <!-- Sección de resultado de precio (cuando se busca específicamente) -->
+    <section class="result-section" *ngIf="market_price() !== null || error_message()">
+        <div class="result-card" *ngIf="market_price() !== null; else errorBlock">
+            <h2>Precio de mercado</h2>
+            <p class="result-price">
+                {{ market_price() | number : '1.2-2' }} {{ currency() }}
+            </p>
+            <p class="result-note">
+                Valor aproximado basado en los listados actuales de TCGplayer.
+            </p>
+        </div>
+
+        <ng-template #errorBlock>
+            <div class="result-error">
+                {{ error_message() }}
+            </div>
+        </ng-template>
+    </section>
+</main>
+
+

@@ -1,0 +1,693 @@
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0b1120 0, #020617 45%, #000 100%);
+    color: #e5e7eb;
+}
+
+.search-container {
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 1rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
+}
+
+.search-box button {
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    border: none;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-box button:hover:enabled {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+}
+
+.search-box button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.search-spinner-small {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+.filters-section {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.filters-title {
+    font-size: 1.1rem;
+    color: #f97316;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.filter-group label {
+    font-size: 0.85rem;
+    color: #d1d5db;
+    font-weight: 500;
+}
+
+.filter-group select,
+.filter-group input[type="number"] {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.filter-group select:focus,
+.filter-group input[type="number"]:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
+}
+
+.clear-filters-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: transparent;
+    color: #9ca3af;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    align-self: end;
+}
+
+.clear-filters-btn:hover {
+    background: rgba(148, 163, 184, 0.1);
+    border-color: rgba(148, 163, 184, 0.8);
+    color: #e5e7eb;
+}
+
+.results-count {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+    font-size: 0.9rem;
+    color: #9ca3af;
+    text-align: center;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.results-count-badge {
+    font-size: 1rem;
+    color: #9ca3af;
+    font-weight: normal;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pagination-btn:hover:enabled {
+    background: rgba(249, 115, 22, 0.2);
+    border-color: rgba(249, 115, 22, 0.8);
+    color: #f97316;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pagination-page-btn {
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pagination-page-btn:hover:enabled {
+    background: rgba(249, 115, 22, 0.2);
+    border-color: rgba(249, 115, 22, 0.8);
+}
+
+.pagination-page-btn.active {
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    border-color: transparent;
+    color: white;
+    cursor: default;
+}
+
+.pagination-page-btn:disabled {
+    cursor: default;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 2.5rem 1.5rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f97316;
+    margin: 0 0 0.75rem;
+}
+
+.page-subtitle {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.98rem;
+}
+
+.card-form-container {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 1rem;
+    padding: 1.75rem 1.5rem;
+    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    backdrop-filter: blur(18px);
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #d1d5db;
+}
+
+input[type='text'] {
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+input[type='text']:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
+    background: #020617;
+}
+
+.form-field-inline {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    color: #cbd5f5;
+}
+
+input[type='checkbox'] {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: #f97316;
+}
+
+.field-error {
+    font-size: 0.8rem;
+    color: #fca5a5;
+}
+
+.field-hint {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.autocomplete-container {
+    position: relative;
+}
+
+.search-indicator {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.search-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    border-top-color: #f97316;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+input[type='text'] {
+    padding-right: 6rem; /* Espacio para el indicador de búsqueda */
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.25rem;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    transition: background-color 0.15s ease;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: rgba(249, 115, 22, 0.15);
+}
+
+.suggestion-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.suggestion-image {
+    width: 60px;
+    height: 84px;
+    object-fit: contain;
+    border-radius: 0.4rem;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(15, 23, 42, 0.5);
+    flex-shrink: 0;
+}
+
+.suggestion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.suggestion-text {
+    font-size: 0.95rem;
+    color: #e5e7eb;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.suggestion-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.suggestion-set {
+    color: #9ca3af;
+    background: rgba(148, 163, 184, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+}
+
+.suggestion-rarity {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+}
+
+.suggestion-price {
+    color: #34d399;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+button[type='submit'] {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    border: none;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    color: white;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+button[type='submit']:hover:enabled {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 25px rgba(248, 113, 113, 0.3);
+    filter: brightness(1.05);
+}
+
+button[type='submit']:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.result-section {
+    margin-top: 2rem;
+}
+
+.result-card,
+.result-error {
+    border-radius: 1rem;
+    padding: 1.5rem 1.25rem;
+}
+
+.result-card {
+    background: radial-gradient(circle at top left, rgba(248, 113, 113, 0.25), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(248, 250, 252, 0.1);
+}
+
+.result-error {
+    background: rgba(127, 29, 29, 0.9);
+    border: 1px solid rgba(248, 113, 113, 0.8);
+    color: #fee2e2;
+}
+
+.result-price {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin: 0.35rem 0 0.5rem;
+}
+
+.result-note {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #e5e7eb;
+}
+
+.search-results-section {
+    margin-top: 2.5rem;
+}
+
+.results-title {
+    font-size: 1.5rem;
+    color: #f97316;
+    margin: 0 0 1.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.result-card-item {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.result-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(249, 115, 22, 0.2);
+    border-color: rgba(249, 115, 22, 0.5);
+}
+
+.card-image-container {
+    width: 100%;
+    aspect-ratio: 63 / 88; /* Proporción estándar de cartas TCG */
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card-placeholder {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.card-number {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    background: rgba(148, 163, 184, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.card-rarity {
+    font-size: 0.85rem;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.card-price-container {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.card-price-label {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.card-price-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #34d399;
+}
+
+.card-select-btn {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(249, 115, 22, 0.5);
+    background: rgba(249, 115, 22, 0.1);
+    color: #f97316;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-select-btn:hover {
+    background: rgba(249, 115, 22, 0.2);
+    border-color: rgba(249, 115, 22, 0.8);
+}
+
+@media (min-width: 720px) {
+    .card-form-container {
+        padding: 2rem 2.25rem;
+    }
+
+    form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 1.5rem;
+    }
+
+    .form-field:nth-child(3),
+    button[type='submit'] {
+        grid-column: 1 / -1;
+    }
+
+    .page-title {
+        font-size: 2.6rem;
+    }
+
+    .results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
